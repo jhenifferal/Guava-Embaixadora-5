@@ -273,7 +273,12 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
   const FIM = new Date("2026-11-29T23:59:59-03:00");
   /* Participantes: nome, Instagram, TikTok e no que a pessoa é boa (respostas do formulário) */
   const PARTICIPANTES = [
-    {nome: "Jheni", instagram: "https://www.instagram.com/jhenifferlimaa", tiktok: "https://www.tiktok.com/@jhenifferalima", boa: "Conteúdo"}
+    {"nome": "Jheni", "instagram": "https://www.instagram.com/jhenifferlimaa", "tiktok": "https://www.tiktok.com/@jhenifferalima", "boa": "Conteúdo"},
+    {"nome": "Carol", "instagram": "@carolbuueno", "tiktok": "@carolbuueno", "boa": "Conteúdo"},
+    {"nome": "Karoline", "instagram": "@karoline_freitaas", "tiktok": "Karolinefreitaas01", "boa": "Vendas e conteúdo"},
+    {"nome": "Bianca Sousa", "instagram": "https://www.instagram.com/surdaqueviaja/", "tiktok": "https://www.tiktok.com/@surdaqueviaja", "boa": "Conteúdo"},
+    {"nome": "Hellen", "instagram": "@byhellenoliveira", "tiktok": "Embaixadorahellenoliveira", "boa": "Vendas e conteúdo"},
+    {"nome": "May", "instagram": "@aalinhares", "tiktok": "@aalinhares_", "boa": "Conteúdo"}
   ];
   /* ===== fim da parte pra editar ===== */
 
@@ -313,6 +318,7 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
   peopleEl.innerHTML = ps.length
     ? ps.map(p => `<article class="person"><h3>${esc(p.nome)}</h3>${p.boa ? `<span class="boa">Boa em ${esc(String(p.boa).toLowerCase())}</span>` : ""}<div class="links">${p.ig ? `<a href="https://instagram.com/${encodeURIComponent(p.ig)}" target="_blank" rel="noopener" aria-label="Instagram de ${esc(p.nome)}">Instagram</a>` : ""}${p.tt ? `<a href="https://www.tiktok.com/@${encodeURIComponent(p.tt)}" target="_blank" rel="noopener" aria-label="TikTok de ${esc(p.nome)}">TikTok</a>` : ""}${!p.ig && !p.tt ? `<span>sem perfil informado</span>` : ""}</div></article>`).join("")
     : `<p class="empty">Assim que as respostas do formulário chegarem, os perfis aparecem aqui pra todo mundo se seguir.</p>`;
+  if (ps.length) document.getElementById("t-pt").textContent = `Participantes · ${ps.length} confirmadas`;
   const copiarBtn = document.getElementById("copiar"), copiado = document.getElementById("copiado");
   const igs = ps.filter(p => p.ig).map(p => "@" + p.ig);
   if (igs.length) {
