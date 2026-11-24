@@ -108,6 +108,8 @@ table.rk{width:100%;border-collapse:collapse;font-size:15px;margin-top:14px}
 .ptop{display:flex;justify-content:space-between;gap:12px;align-items:end;flex-wrap:wrap}
 .how{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
 .how div{border:1px solid var(--line);border-radius:14px;padding:12px}
+.how .hl{grid-column:1/-1;background:var(--pink);border-color:transparent;color:#1F2119}
+.how .hl span{color:#2F3325}
 .how b{display:block;font-family:var(--display);font-weight:800;font-size:24px;line-height:1.1}
 .how span{font-size:14px;color:var(--muted)}
 h3.sub{font-size:22px;margin:18px 0 8px}
@@ -115,6 +117,14 @@ h3.sub{font-size:22px;margin:18px 0 8px}
 .faq details{border:1px solid var(--line);border-radius:14px;padding:12px 14px}
 .faq summary{cursor:pointer;font-weight:600;min-height:24px}
 .faq details p{margin-top:8px;color:var(--muted)}
+.news{background:var(--dark);color:#F4F6EC;border-radius:20px;padding:clamp(18px,3vw,26px);margin-bottom:24px;display:flex;flex-direction:column;gap:12px}
+.news h2{font-size:clamp(28px,4.5vw,40px);color:#F4F6EC}
+.news .tag{align-self:flex-start;font-size:13px;font-weight:600;padding:4px 10px;border-radius:99px;background:var(--pink);color:#1F2119}
+.news-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.news-grid div{background:rgba(255,255,255,.08);border-radius:14px;padding:12px 14px}
+.news-grid b{display:block;font-family:var(--display);font-weight:800;font-size:30px;line-height:1.1;color:var(--pink)}
+.news-grid span{font-size:14px;opacity:.85}
+.news p{font-size:15px;opacity:.85;max-width:62ch}
 ol.steps{margin:0 0 20px;padding-left:22px;display:flex;flex-direction:column;gap:10px}
 ol.steps small{display:block;color:var(--muted);font-size:14px}
 #forms{width:100%}
@@ -155,6 +165,16 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
     </div>
   </header>
 
+  <section class="news" aria-labelledby="t-news">
+    <span class="tag">Novidade da Guava</span>
+    <h2 id="t-news">Gel de Sobrancelhas vale ponto extra</h2>
+    <div class="news-grid">
+      <div><b>1 ponto</b><span>por unidade de Gel de Sobrancelhas vendida</span></div>
+      <div><b>0,01 ponto</b><span>por R$ 1 vendido, como antes</span></div>
+    </div>
+    <p>Uma unidade do lançamento vale o mesmo ponto que R$ 100 em vendas. Vale lembrar dele nos stories e nas mensagens com o seu link.</p>
+  </section>
+
   <div class="band">
     <section class="clock" aria-labelledby="t-cd">
       <h2 id="t-cd">Falta pro fim do Duelo</h2>
@@ -176,7 +196,7 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
       <div class="dicas" id="dicas"></div>
       <div class="scroll"><table class="rk" id="rk"></table></div>
       <p class="tip" id="valid"></p>
-      <p class="tip">1 post = 1 ponto, até 10 por embaixadora · R$ 100 em vendas = 1 ponto</p>
+      <p class="tip">1 post = 1 ponto, até 10 por embaixadora · R$ 100 em vendas = 1 ponto · 1 Gel de Sobrancelhas vendido = 1 ponto</p>
     </section>
   </div>
 
@@ -207,6 +227,7 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
         <div class="how">
           <div><b>1 post = 1 ponto</b><span>até 10 pontos por embaixadora</span></div>
           <div><b>R$ 100 = 1 ponto</b><span>R$ 1 vendido vale 0,01</span></div>
+          <div class="hl"><b>1 gel = 1 ponto</b><span>cada Gel de Sobrancelhas vendido, regra nova da Guava</span></div>
         </div>
         <p class="tip">Exemplo do material: 5 posts (5 pontos) + R$ 500 vendidos (5 pontos) = 10 pontos.</p>
         <h3 class="sub">O grupo vencedor leva, pra todas que participarem</h3>
@@ -361,6 +382,7 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
     dicas.push(`Com <b>${posts} posts a mais</b> o time passa o ${esc(acima.grupo)}.`);
     if (eu > 1) dicas.push(`Pro 1º lugar faltam <b>${n2(ord[0].total - ord[eu].total)} pontos</b>.`);
   } else if (eu === 0) dicas.push("O time está em <b>1º lugar</b>. Bora segurar!");
+  dicas.push("Cada <b>Gel de Sobrancelhas</b> vendido vale <b>1 ponto</b>, o mesmo que R$ 100 em vendas.");
   const faltaPart = A.participando == null ? null : Math.max(0, A.metaParticipacao - A.participando);
   if (faltaPart) dicas.push(`Já são <b>${A.participando} embaixadoras participando</b>. Faltam <b>${faltaPart} diferentes</b> postarem ou venderem pra bater os 30%.`);
   if (A.venderam != null && A.venderam < 10) dicas.push(`Pra validar, faltam <b>${10 - A.venderam} embaixadoras com venda</b>.`);
