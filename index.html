@@ -125,6 +125,14 @@ h3.sub{font-size:22px;margin:18px 0 8px}
 .news-grid b{display:block;font-family:var(--display);font-weight:800;font-size:30px;line-height:1.1;color:var(--pink)}
 .news-grid span{font-size:14px;opacity:.85}
 .news p{font-size:15px;opacity:.85;max-width:62ch}
+.pts{display:flex;flex-direction:column}
+.pts-net{font-family:var(--display);font-weight:700;font-size:20px;margin-top:12px;padding-bottom:4px;border-bottom:2px solid var(--pink)}
+.pts-net:first-child{margin-top:0}
+.pts-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.pts-row b{display:block}
+.pts-row small{color:var(--muted);font-size:14px}
+.pts-row span{font-family:var(--display);font-weight:800;font-size:22px;white-space:nowrap}
+.pts-warn{font-size:14px;font-weight:600;color:var(--err);padding:8px 0 0}
 ol.steps{margin:0 0 20px;padding-left:22px;display:flex;flex-direction:column;gap:10px}
 ol.steps small{display:block;color:var(--muted);font-size:14px}
 #forms{width:100%}
@@ -237,6 +245,23 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
           <li>Mimo surpresa personalizado pro grupo</li>
           <li>Prêmio extra pra capitã indicada pelo grupo</li>
         </ul>
+      </section>
+
+      <section class="card" id="pontuacao" aria-labelledby="t-pts">
+        <h2 id="t-pts">Quanto vale cada coisa</h2>
+        <p class="lead">Pontuação da campanha no app da Inbazz.</p>
+        <div class="pts">
+          <div class="pts-net">Instagram</div>
+          <div class="pts-row"><div><b>Stories</b><small>uma sequência de stories em 24h</small></div><span>1 ponto</span></div>
+          <div class="pts-row"><div><b>Reels</b><small>cada reel publicado</small></div><span>1 ponto</span></div>
+          <p class="pts-warn">Reels de teste não contam pontos.</p>
+          <div class="pts-net">TikTok</div>
+          <div class="pts-row"><div><b>Feed</b><small>cada publicação</small></div><span>1 ponto</span></div>
+          <div class="pts-net">Vendas</div>
+          <div class="pts-row"><div><b>Faturamento</b><small>cada R$ 1 vendido pelo seu cupom ou link</small></div><span>0,01 ponto</span></div>
+          <div class="pts-row"><div><b>Gel de Sobrancelhas</b><small>cada unidade vendida</small></div><span>1 ponto</span></div>
+        </div>
+        <p class="tip">No Duelo, os posts de cada embaixadora somam no máximo 10 pontos pro grupo. Venda não tem limite.</p>
       </section>
 
       <section class="card" id="materiais" aria-labelledby="t-mat">
