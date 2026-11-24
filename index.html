@@ -338,22 +338,23 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
   /* ===== PLACAR: atualize aqui a cada ranking da Guava =====
      atual: os números do ranking mais recente
      anterior: os números do ranking de antes (pra mostrar quanto mudou)
-     participando / metaParticipacao: embaixadoras do grupo que já postaram ou venderam, e quantas o grupo precisa pros 30%
-     venderam: embaixadoras com pelo menos 1 venda (null quando a Guava não divulgou) */
+     participacao: % do quadro de validação da Guava · venderam: embaixadoras com pelo menos 1 venda (null se não divulgado)
+     tamanhoGrupo: total de embaixadoras do grupo 5 (20 participando + 16 faltando = 36 = 30% de 119) */
+  const TAMANHO_GRUPO = 119;
   const PLACAR = {
-    atualizado: "24/11 às 11h",
-    atual:    {posicao: 4, total: 31.31, vendas: 14.31, posts: 17, participando: 20, metaParticipacao: 36, venderam: null},
-    anterior: {posicao: 7, total: 8.00, vendas: 0.00, posts: 8, participando: null, metaParticipacao: 36, venderam: 0}
+    atualizado: "24/11 às 17h",
+    atual:    {posicao: 4, total: 43.31, vendas: 14.31, posts: 29, participacao: 21.85, venderam: 5},
+    anterior: {posicao: 4, total: 31.31, vendas: 14.31, posts: 17, participacao: 16.81, venderam: null}
   };
   /* Ranking de todos os grupos, igual ao placar da Guava (participacao e venderam: null quando não divulgado) */
   const RANKING = [
-    {grupo: "Grupo 2", posts: 37, vendas: 34.33, total: 71.33, participacao: null, venderam: null},
-    {grupo: "Grupo 1", posts: 50, vendas: 10.11, total: 60.11, participacao: null, venderam: null},
-    {grupo: "Grupo 7", posts: 35, vendas: 7.75, total: 42.75, participacao: null, venderam: null},
-    {grupo: "Grupo 5", posts: 17, vendas: 14.31, total: 31.31, participacao: null, venderam: null},
-    {grupo: "Grupo 4", posts: 9, vendas: 16.82, total: 25.82, participacao: null, venderam: null},
-    {grupo: "Grupo 6", posts: 14, vendas: 10.99, total: 24.99, participacao: null, venderam: null},
-    {grupo: "Grupo 3", posts: 14, vendas: 2.55, total: 16.55, participacao: null, venderam: null}
+    {grupo: "Grupo 2", posts: 67, vendas: 46.78, total: 113.78, participacao: 23.53, venderam: 10},
+    {grupo: "Grupo 7", posts: 49, vendas: 7.75, total: 56.75, participacao: 21.67, venderam: 3},
+    {grupo: "Grupo 1", posts: 36, vendas: 13.33, total: 49.33, participacao: 24.35, venderam: 6},
+    {grupo: "Grupo 5", posts: 29, vendas: 14.31, total: 43.31, participacao: 21.85, venderam: 5},
+    {grupo: "Grupo 4", posts: 26, vendas: 16.82, total: 42.82, participacao: 19.77, venderam: 4},
+    {grupo: "Grupo 6", posts: 24, vendas: 10.99, total: 34.99, participacao: 11.38, venderam: 4},
+    {grupo: "Grupo 3", posts: 16, vendas: 2.55, total: 18.55, participacao: 19.32, venderam: 1}
   ];
   const FIM = new Date("2026-11-30T23:59:59-03:00");
   /* Participantes: nome, Instagram, TikTok e no que a pessoa é boa (respostas do formulário) */
@@ -393,7 +394,7 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
     {k: "Pontos no total", v: n2(A.total), d: delta(A.total, P.total, n2), main: true},
     {k: "Pontos por posts", v: nf(A.posts), d: delta(A.posts, P.posts, nf)},
     {k: "Pontos por vendas", v: n2(A.vendas), d: delta(A.vendas, P.vendas, n2)},
-    {k: "Participando · meta " + A.metaParticipacao, v: A.participando == null ? "–" : nf(A.participando) + "<small style='font-size:15px'> / " + A.metaParticipacao + "</small>", d: delta(A.participando, P.participando, nf) + meter((A.participando || 0) / A.metaParticipacao * 100)},
+    {k: "Participação · meta 30%", v: A.participacao == null ? "–" : n2(A.participacao) + "%", d: delta(A.participacao, P.participacao, x => n2(x) + " pp") + meter((A.participacao || 0) / 30 * 100)},
     {k: "Com venda · meta 10", v: A.venderam == null ? "–" : nf(A.venderam) + "<small style='font-size:15px'> / 10</small>", d: A.venderam == null ? `<span class="d eq">não divulgado ainda</span>` : meter(A.venderam * 10, "warm")}
   ];
   document.getElementById("tiles").innerHTML = tiles.map(t => `<div class="tile${t.main ? " main" : ""}"><div class="k">${t.k}</div><div class="v">${t.v}</div>${t.d}</div>`).join("");
@@ -406,10 +407,13 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
     const posts = Math.floor(gap) + 1;
     dicas.push(`Com <b>${posts} posts a mais</b> o time passa o ${esc(acima.grupo)}.`);
     if (eu > 1) dicas.push(`Pro 1º lugar faltam <b>${n2(ord[0].total - ord[eu].total)} pontos</b>.`);
+    if (eu < ord.length - 1) { const abaixo = ord[eu + 1], folga = Math.round((ord[eu].total - abaixo.total) * 100) / 100; if (folga < 3) dicas.push(`Atenção: o ${esc(abaixo.grupo)} está só <b>${n2(folga)} ${folga === 1 ? "ponto" : "pontos"} atrás</b>.`); }
   } else if (eu === 0) dicas.push("O time está em <b>1º lugar</b>. Bora segurar!");
   dicas.push("Cada <b>Gel de Sobrancelhas</b> vendido vale <b>1 ponto</b>, o mesmo que R$ 100 em vendas.");
-  const faltaPart = A.participando == null ? null : Math.max(0, A.metaParticipacao - A.participando);
-  if (faltaPart) dicas.push(`Já são <b>${A.participando} embaixadoras participando</b>. Faltam <b>${faltaPart} diferentes</b> postarem ou venderem pra bater os 30%.`);
+  if (A.participacao != null && A.participacao < 30) {
+    const meta = Math.ceil(TAMANHO_GRUPO * 0.3), ja = Math.round(A.participacao / 100 * TAMANHO_GRUPO);
+    dicas.push(`Já são cerca de <b>${ja} embaixadoras participando</b>. Faltam <b>${Math.max(0, meta - ja)} diferentes</b> postarem ou venderem pra bater os 30%.`);
+  }
   if (A.venderam != null && A.venderam < 10) dicas.push(`Pra validar, faltam <b>${10 - A.venderam} embaixadoras com venda</b>.`);
   document.getElementById("dicas").innerHTML = dicas.map(d => `<p>${d}</p>`).join("");
 
@@ -418,7 +422,10 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
     ord.map((r, i) => `<tr class="${i === eu ? "me" : ""}"><td>${i + 1}º · ${esc(r.grupo)}</td><td><b>${n2(r.total)}</b></td><td>${nf(r.posts)}</td><td>${n2(r.vendas)}</td><td>${r.participacao == null ? "–" : pill(r.participacao >= 30, n2(r.participacao) + "%")}</td><td>${r.venderam == null ? "–" : pill(r.venderam >= 10, r.venderam + "/10")}</td></tr>`).join("") + "</tbody>";
   const semValid = RANKING.every(r => r.participacao == null && r.venderam == null);
   const validados = RANKING.filter(r => r.participacao >= 30 && r.venderam >= 10).length;
-  document.getElementById("valid").textContent = semValid ? "A validação dos grupos não veio nesse placar. Os traços entram assim que a Guava divulgar." : validados ? `${validados} ${validados === 1 ? "grupo validado" : "grupos validados"} até agora.` : "Nenhum grupo validado até agora: todos ainda precisam de 30% de participação e 10 embaixadoras com venda.";
+  const meio = RANKING.filter(r => !(r.participacao >= 30 && r.venderam >= 10) && (r.participacao >= 30 || r.venderam >= 10));
+  document.getElementById("valid").textContent = semValid ? "A validação dos grupos não veio nesse placar. Os traços entram assim que a Guava divulgar."
+    : validados ? `${validados} ${validados === 1 ? "grupo validado" : "grupos validados"} até agora.`
+    : "Nenhum grupo validado até agora." + (meio.length ? " " + meio.map(r => `${r.grupo} já bateu ${r.venderam >= 10 ? "as 10 com venda" : "os 30%"}, mas ainda falta ${r.venderam >= 10 ? "participação" : "venda"}.`).join(" ") : "");
 
   const handle = v => {
     v = String(v || "").trim();
