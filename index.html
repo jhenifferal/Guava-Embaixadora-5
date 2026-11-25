@@ -133,6 +133,7 @@ h3.sub{font-size:22px;margin:18px 0 8px}
 .pts-row small{color:var(--muted);font-size:14px}
 .pts-row span{font-family:var(--display);font-weight:800;font-size:22px;white-space:nowrap}
 .pts-warn{font-size:14px;font-weight:600;color:var(--err);padding:8px 0 0}
+.lista{width:100%;min-height:220px;margin-top:10px;font:14px/1.5 var(--body);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px}
 ol.steps{margin:0 0 20px;padding-left:22px;display:flex;flex-direction:column;gap:10px}
 ol.steps small{display:block;color:var(--muted);font-size:14px}
 #forms{width:100%}
@@ -309,10 +310,11 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
         <h2 id="t-pt">Participantes</h2>
         <p class="lead" style="margin:0">Segue todo mundo do time e engaja nos posts das colegas: like, comentário e compartilhamento ajudam a equipe toda.</p>
       </div>
-      <button class="btn ghost" type="button" id="copiar" hidden>Copiar todos os @</button>
+      <button class="btn ghost" type="button" id="copiar" hidden>Copiar lista com os links</button>
     </div>
     <div class="people" id="people"></div>
-    <p class="tip" id="copiado" role="status" hidden>Copiado. Cola na busca do Instagram, um @ por vez.</p>
+    <p class="tip" id="copiado" role="status" hidden></p>
+    <textarea id="lista" class="lista" readonly hidden aria-label="Lista de perfis com links"></textarea>
   </section>
 
   <footer>Página organizada por Jheniffer Lima (@jhenifferlimaa) para a equipe 5. Não é um site oficial da Guava.</footer>
@@ -369,10 +371,15 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
     {"nome": "Thai", "instagram": "@thaisilveirac", "tiktok": "@thainasilveiraa", "boa": "Vendas e conteúdo"},
     {"nome": "Wilana Lopes", "instagram": "@_wilana", "tiktok": "@_wilana", "boa": "Conteúdo"},
     {"nome": "Thata", "instagram": "Thaispezolato", "tiktok": "Thaispezolato", "boa": "Conteúdo"},
-    {"nome": "Carol", "instagram": "@Carolcamppana", "tiktok": "@carolcamppana", "boa": "Vendas e conteúdo"},
+    {"nome": "Carol Camppana", "instagram": "@Carolcamppana", "tiktok": "@carolcamppana", "boa": "Vendas e conteúdo"},
     {"nome": "Luiza Fraga", "instagram": "@luizafragafl", "tiktok": "@luizafragafl", "boa": "Conteúdo"},
     {"nome": "Mell", "instagram": "@mellziland", "tiktok": "@mellziland", "boa": "Vendas e conteúdo"},
-    {"nome": "Lívia B", "instagram": "bianchii_liv", "tiktok": "Promoebeauty", "boa": "Vendas e conteúdo"}
+    {"nome": "Lívia B", "instagram": "bianchii_liv", "tiktok": "Promoebeauty", "boa": "Vendas e conteúdo"},
+    {"nome": "Kellen", "instagram": "https://www.instagram.com/kellenamancio", "tiktok": "", "boa": ""},
+    {"nome": "Ana Trindade", "instagram": "https://www.instagram.com/anatrindadeeee", "tiktok": "", "boa": ""},
+    {"nome": "Paloma", "instagram": "https://www.instagram.com/paloma.lolla", "tiktok": "", "boa": ""},
+    {"nome": "Karen", "instagram": "https://www.instagram.com/karenmatosc/", "tiktok": "", "boa": ""},
+    {"nome": "Brenda", "instagram": "https://www.instagram.com/brendabittencourt/", "tiktok": "", "boa": ""}
   ];
   /* ===== fim da parte pra editar ===== */
 
@@ -440,12 +447,20 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
     : `<p class="empty">Assim que as respostas do formulário chegarem, os perfis aparecem aqui pra todo mundo se seguir.</p>`;
   if (ps.length) document.getElementById("t-pt").textContent = `Participantes · ${ps.length} confirmadas`;
   const copiarBtn = document.getElementById("copiar"), copiado = document.getElementById("copiado");
-  const igs = ps.filter(p => p.ig).map(p => "@" + p.ig);
-  if (igs.length) {
+  const lista = ps.filter(p => p.ig || p.tt).map(p => [p.nome, p.ig ? "Instagram: https://instagram.com/" + p.ig : "", p.tt ? "TikTok: https://www.tiktok.com/@" + p.tt : ""].filter(Boolean).join("\n")).join("\n\n");
+  const listaEl = document.getElementById("lista");
+  if (lista) {
     copiarBtn.hidden = false;
     copiarBtn.addEventListener("click", async () => {
-      try { await navigator.clipboard.writeText(igs.join("\n")); copiado.textContent = "Copiado. Cola na busca do Instagram, um @ por vez."; }
-      catch (e) { copiado.textContent = igs.join("  "); }
+      const texto = "Perfis da equipe 5 pra seguir 💚\n\n" + lista;
+      try {
+        await navigator.clipboard.writeText(texto);
+        copiado.textContent = "Lista copiada. É só colar no grupo: cada link abre direto no perfil.";
+        listaEl.hidden = true;
+      } catch (e) {
+        copiado.textContent = "Não deu pra copiar sozinho. Toque na caixa abaixo, selecione tudo e copie.";
+        listaEl.value = texto; listaEl.hidden = false; listaEl.focus(); listaEl.select();
+      }
       copiado.hidden = false;
     });
   }
