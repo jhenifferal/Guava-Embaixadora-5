@@ -134,6 +134,15 @@ h3.sub{font-size:22px;margin:18px 0 8px}
 .pts-row span{font-family:var(--display);font-weight:800;font-size:22px;white-space:nowrap}
 .pts-warn{font-size:14px;font-weight:600;color:var(--err);padding:8px 0 0}
 .lista{width:100%;min-height:220px;margin-top:10px;font:14px/1.5 var(--body);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px}
+.cupons{margin-bottom:24px;border:2px solid var(--pink)}
+.cup-list{list-style:none;margin:14px 0 6px;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.cup{display:flex;flex-direction:column;align-items:flex-start;gap:0;min-height:48px;padding:6px 12px;border:1px solid transparent;border-radius:10px;background:var(--soft);color:var(--ink);cursor:pointer;text-align:left}
+.cup:hover{border-color:var(--pink-ink)}
+.cup:focus-visible{outline:2px solid var(--pink-ink);outline-offset:2px}
+.cup-t{font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:.02em;line-height:1.15}
+.cup-s{font:600 12px var(--body);color:var(--muted)}
+.cup.ok{background:var(--pink);color:#1F2119}
+.cup.ok .cup-s{color:#1F2119}
 ol.steps{margin:0 0 20px;padding-left:22px;display:flex;flex-direction:column;gap:10px}
 ol.steps small{display:block;color:var(--muted);font-size:14px}
 #forms{width:100%}
@@ -208,6 +217,18 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
       <p class="tip">1 post = 1 ponto, até 10 por embaixadora · R$ 100 em vendas = 1 ponto · 1 Gel de Sobrancelhas vendido = 1 ponto</p>
     </section>
   </div>
+
+  <section class="card cupons" aria-labelledby="t-cup">
+    <div class="ptop">
+      <div>
+        <h2 id="t-cup">Cupons que ainda não venderam</h2>
+        <p class="lead" style="margin:0" id="cup-lead"></p>
+      </div>
+      <span class="upd" id="cup-upd"></span>
+    </div>
+    <ul class="cup-list" id="cup-list"></ul>
+    <p class="tip">Toque num cupom pra copiar. Se o seu cupom está aqui, uma venda já conta pro grupo, e o Gel de Sobrancelhas ainda vale 1 ponto por unidade. Stories com o seu link perto das 13h, horário de pico de vendas, ajudam.</p>
+  </section>
 
   <div class="grid">
     <section class="card" aria-labelledby="t-form">
@@ -344,20 +365,25 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
      tamanhoGrupo: total de embaixadoras do grupo 5 (20 participando + 16 faltando = 36 = 30% de 119) */
   const TAMANHO_GRUPO = 119;
   const PLACAR = {
-    atualizado: "24/11 às 17h",
-    atual:    {posicao: 4, total: 43.31, vendas: 14.31, posts: 29, participacao: 21.85, venderam: 5},
-    anterior: {posicao: 4, total: 31.31, vendas: 14.31, posts: 17, participacao: 16.81, venderam: null}
+    atualizado: "26/11 às 12h",
+    atual:    {posicao: 4, total: 205.46, vendas: 22.46, posts: 183, participacao: 31.09, venderam: 7},
+    anterior: {posicao: 4, total: 43.31, vendas: 14.31, posts: 29, participacao: 21.85, venderam: 5}
   };
   /* Ranking de todos os grupos, igual ao placar da Guava (participacao e venderam: null quando não divulgado) */
   const RANKING = [
-    {grupo: "Grupo 2", posts: 67, vendas: 46.78, total: 113.78, participacao: 23.53, venderam: 10},
-    {grupo: "Grupo 7", posts: 49, vendas: 7.75, total: 56.75, participacao: 21.67, venderam: 3},
-    {grupo: "Grupo 1", posts: 36, vendas: 13.33, total: 49.33, participacao: 24.35, venderam: 6},
-    {grupo: "Grupo 5", posts: 29, vendas: 14.31, total: 43.31, participacao: 21.85, venderam: 5},
-    {grupo: "Grupo 4", posts: 26, vendas: 16.82, total: 42.82, participacao: 19.77, venderam: 4},
-    {grupo: "Grupo 6", posts: 24, vendas: 10.99, total: 34.99, participacao: 11.38, venderam: 4},
-    {grupo: "Grupo 3", posts: 16, vendas: 2.55, total: 18.55, participacao: 19.32, venderam: 1}
+    {grupo: "Grupo 2", posts: 276, vendas: 79.05, total: 355.05, participacao: 40.34, venderam: 12},
+    {grupo: "Grupo 7", posts: 289, vendas: 42.13, total: 331.13, participacao: 40.83, venderam: 7},
+    {grupo: "Grupo 1", posts: 251, vendas: 25.72, total: 276.72, participacao: 40.00, venderam: 12},
+    {grupo: "Grupo 5", posts: 183, vendas: 22.46, total: 205.46, participacao: 31.09, venderam: 7},
+    {grupo: "Grupo 3", posts: 179, vendas: 22.17, total: 201.17, participacao: 34.09, venderam: 5},
+    {grupo: "Grupo 4", posts: 124, vendas: 37.38, total: 161.38, participacao: 34.88, venderam: 13},
+    {grupo: "Grupo 6", posts: 125, vendas: 15.87, total: 140.87, participacao: 25.20, venderam: 6}
   ];
+  /* Cupons do grupo 5 que ainda não venderam no Duelo (lista da Guava) */
+  const CUPONS_SEM_VENDA = {
+    atualizado: "26/11",
+    lista: ["KELLEN", "KAFREITAS", "PAULINHAP", "CAROLBUENO", "JULINHAZARA", "FAMILIASCARPA", "BRENDAB10", "MAYLIMA", "NAZY", "ALY", "JHENILIMA", "TRINDADE", "Gisela Salles", "TMZCAROLINE", "MARCELAMORAES", "WILANA"]
+  };
   const FIM = new Date("2026-11-30T23:59:59-03:00");
   /* Participantes: nome, Instagram, TikTok e no que a pessoa é boa (respostas do formulário) */
   const PARTICIPANTES = [
@@ -414,9 +440,10 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
     const posts = Math.floor(gap) + 1;
     dicas.push(`Com <b>${posts} posts a mais</b> o time passa o ${esc(acima.grupo)}.`);
     if (eu > 1) dicas.push(`Pro 1º lugar faltam <b>${n2(ord[0].total - ord[eu].total)} pontos</b>.`);
-    if (eu < ord.length - 1) { const abaixo = ord[eu + 1], folga = Math.round((ord[eu].total - abaixo.total) * 100) / 100; if (folga < 3) dicas.push(`Atenção: o ${esc(abaixo.grupo)} está só <b>${n2(folga)} ${folga === 1 ? "ponto" : "pontos"} atrás</b>.`); }
+    if (eu < ord.length - 1) { const abaixo = ord[eu + 1], folga = Math.round((ord[eu].total - abaixo.total) * 100) / 100; if (folga < 5) dicas.push(`Atenção: o ${esc(abaixo.grupo)} está só <b>${n2(folga)} ${folga === 1 ? "ponto" : "pontos"} atrás</b>.`); }
   } else if (eu === 0) dicas.push("O time está em <b>1º lugar</b>. Bora segurar!");
   dicas.push("Cada <b>Gel de Sobrancelhas</b> vendido vale <b>1 ponto</b>, o mesmo que R$ 100 em vendas.");
+  if (A.participacao != null && A.participacao >= 30) dicas.push(`<b>Meta de 30% batida</b>: o time está com ${n2(A.participacao)}% de participação. Agora é não deixar cair.`);
   if (A.participacao != null && A.participacao < 30) {
     const meta = Math.ceil(TAMANHO_GRUPO * 0.3), ja = Math.round(A.participacao / 100 * TAMANHO_GRUPO);
     dicas.push(`Já são cerca de <b>${ja} embaixadoras participando</b>. Faltam <b>${Math.max(0, meta - ja)} diferentes</b> postarem ou venderem pra bater os 30%.`);
@@ -426,12 +453,12 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
 
   const pill = (ok, txt) => `<span class="pill ${ok ? "ok" : ""}">${txt}</span>`;
   document.getElementById("rk").innerHTML = `<thead><tr><th>Posição</th><th>Total</th><th>Posts</th><th>Vendas</th><th>Part.</th><th>Venderam</th></tr></thead><tbody>` +
-    ord.map((r, i) => `<tr class="${i === eu ? "me" : ""}"><td>${i + 1}º · ${esc(r.grupo)}</td><td><b>${n2(r.total)}</b></td><td>${nf(r.posts)}</td><td>${n2(r.vendas)}</td><td>${r.participacao == null ? "–" : pill(r.participacao >= 30, n2(r.participacao) + "%")}</td><td>${r.venderam == null ? "–" : pill(r.venderam >= 10, r.venderam + "/10")}</td></tr>`).join("") + "</tbody>";
+    ord.map((r, i) => `<tr class="${i === eu ? "me" : ""}"><td>${i + 1}º · ${esc(r.grupo)}${r.participacao >= 30 && r.venderam >= 10 ? ` <span class="pill ok">validado</span>` : ""}</td><td><b>${n2(r.total)}</b></td><td>${nf(r.posts)}</td><td>${n2(r.vendas)}</td><td>${r.participacao == null ? "–" : pill(r.participacao >= 30, n2(r.participacao) + "%")}</td><td>${r.venderam == null ? "–" : pill(r.venderam >= 10, r.venderam + "/10")}</td></tr>`).join("") + "</tbody>";
   const semValid = RANKING.every(r => r.participacao == null && r.venderam == null);
   const validados = RANKING.filter(r => r.participacao >= 30 && r.venderam >= 10).length;
   const meio = RANKING.filter(r => !(r.participacao >= 30 && r.venderam >= 10) && (r.participacao >= 30 || r.venderam >= 10));
   document.getElementById("valid").textContent = semValid ? "A validação dos grupos não veio nesse placar. Os traços entram assim que a Guava divulgar."
-    : validados ? `${validados} ${validados === 1 ? "grupo validado" : "grupos validados"} até agora.`
+    : validados ? `Validados até agora: ${RANKING.filter(r => r.participacao >= 30 && r.venderam >= 10).map(r => r.grupo).join(", ")}. ${A.participacao >= 30 && A.venderam >= 10 ? "O grupo 5 também está validado!" : "O grupo 5 precisa de " + [A.participacao < 30 ? "30% de participação" : "", A.venderam < 10 ? (10 - A.venderam) + " embaixadoras com venda" : ""].filter(Boolean).join(" e ") + " pra entrar."}`
     : "Nenhum grupo validado até agora." + (meio.length ? " " + meio.map(r => `${r.grupo} já bateu ${r.venderam >= 10 ? "as 10 com venda" : "os 30%"}, mas ainda falta ${r.venderam >= 10 ? "participação" : "venda"}.`).join(" ") : "");
 
   const handle = v => {
@@ -464,6 +491,20 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
       copiado.hidden = false;
     });
   }
+
+  document.getElementById("cup-upd").textContent = "Lista de " + CUPONS_SEM_VENDA.atualizado;
+  const cupList = document.getElementById("cup-list");
+  cupList.innerHTML = CUPONS_SEM_VENDA.lista.map(c => `<li><button type="button" class="cup" data-c="${esc(c)}" aria-label="Copiar cupom ${esc(c)}"><span class="cup-t">${esc(c)}</span><span class="cup-s" aria-hidden="true">copiar</span></button></li>`).join("");
+  cupList.addEventListener("click", async ev => {
+    const btn = ev.target.closest(".cup"); if (!btn) return;
+    const t = btn.querySelector(".cup-s"), code = btn.dataset.c;
+    try { await navigator.clipboard.writeText(code); t.textContent = "copiado ✓"; btn.classList.add("ok"); }
+    catch (e) { const r = document.createRange(); r.selectNodeContents(btn.querySelector(".cup-t")); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); t.textContent = "selecionado"; }
+    setTimeout(() => { t.textContent = "copiar"; btn.classList.remove("ok"); }, 1800);
+  });
+  document.getElementById("cup-lead").innerHTML = A.venderam != null && A.venderam < 10
+    ? `Faltam <b>${10 - A.venderam} embaixadoras com venda</b> pra validar o grupo. ${CUPONS_SEM_VENDA.lista.length} cupons ainda não venderam nessa semana.`
+    : `${CUPONS_SEM_VENDA.lista.length} cupons ainda não venderam nessa semana.`;
 
   const cdEls = ["d", "h", "m", "s"].map(k => document.getElementById("cd-" + k));
   const cdTxt = document.getElementById("cd-txt");
