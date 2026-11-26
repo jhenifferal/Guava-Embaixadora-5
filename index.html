@@ -350,8 +350,8 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
   const OFERTAS = [
     {ini:"2026-11-23", fim:"2026-11-23", t:"Black das Influs", d:"Até 60% e máscara de cílios preta de brinde acima de R$ 349, só pelo seu link. Último dia.", q:"hoje"},
     {ini:"2026-11-23", fim:"2026-11-23", t:"Multistick de brinde", d:"Acima de R$ 249, a cliente escolhe a cor. Até as 18h.", q:"até 18h"},
-    {ini:"2026-11-24", fim:"2026-11-30", t:"Black Week", d:"Site inteiro com até 60%.", q:"24 a 30/11"},
-    {ini:"2026-11-27", fim:"2026-11-30", t:"Black Friday", d:"Máscara de cílios preta de brinde acima de R$ 349.", q:"27 a 30/11"},
+    {ini:"2026-11-24", fim:"2026-11-26", t:"Black Week", d:"Site inteiro com até 60%. Até as 18h do dia 26, quando começa a Black Friday.", q:"24 a 26/11"},
+    {ini:"2026-11-26", fim:"2026-11-30", t:"Black Friday", d:"Das 18h do dia 26 às 9h do dia 30: kits com até 50% OFF, unitários com até 35% OFF, 20% extra em todo o site com o seu cupom, frete grátis em todo o site, necessaire acima de R$ 199 e máscara de cílios preta de brinde acima de R$ 349.", q:"26/11 18h a 30/11 9h"},
     {ini:"2026-11-27", fim:"2026-11-30", t:"Duo skincare", d:"Hidratante primer e protetor solar FPS50 com 50%, compre 1 e ganhe outro. Das 10h do dia 27 às 18h do dia 30.", q:"27 a 30/11"}
   ];
 
@@ -365,19 +365,19 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
      tamanhoGrupo: total de embaixadoras do grupo 5 (20 participando + 16 faltando = 36 = 30% de 119) */
   const TAMANHO_GRUPO = 119;
   const PLACAR = {
-    atualizado: "26/11 às 12h",
-    atual:    {posicao: 4, total: 205.46, vendas: 22.46, posts: 183, participacao: 31.09, venderam: 7},
-    anterior: {posicao: 4, total: 43.31, vendas: 14.31, posts: 29, participacao: 21.85, venderam: 5}
+    atualizado: "26/11 às 17h",
+    atual:    {posicao: 4, total: 233.34, vendas: 27.34, posts: 206, participacao: 34.45, venderam: 8},
+    anterior: {posicao: 4, total: 205.46, vendas: 22.46, posts: 183, participacao: 31.09, venderam: 7}
   };
   /* Ranking de todos os grupos, igual ao placar da Guava (participacao e venderam: null quando não divulgado) */
   const RANKING = [
-    {grupo: "Grupo 2", posts: 276, vendas: 79.05, total: 355.05, participacao: 40.34, venderam: 12},
-    {grupo: "Grupo 7", posts: 289, vendas: 42.13, total: 331.13, participacao: 40.83, venderam: 7},
-    {grupo: "Grupo 1", posts: 251, vendas: 25.72, total: 276.72, participacao: 40.00, venderam: 12},
-    {grupo: "Grupo 5", posts: 183, vendas: 22.46, total: 205.46, participacao: 31.09, venderam: 7},
-    {grupo: "Grupo 3", posts: 179, vendas: 22.17, total: 201.17, participacao: 34.09, venderam: 5},
-    {grupo: "Grupo 4", posts: 124, vendas: 37.38, total: 161.38, participacao: 34.88, venderam: 13},
-    {grupo: "Grupo 6", posts: 125, vendas: 15.87, total: 140.87, participacao: 25.20, venderam: 6}
+    {grupo: "Grupo 2", posts: 314, vendas: 88.40, total: 402.40, participacao: 42.86, venderam: 13},
+    {grupo: "Grupo 7", posts: 310, vendas: 63.86, total: 373.86, participacao: 44.17, venderam: 15},
+    {grupo: "Grupo 1", posts: 262, vendas: 28.00, total: 290.00, participacao: 41.74, venderam: 14},
+    {grupo: "Grupo 5", posts: 206, vendas: 27.34, total: 233.34, participacao: 34.45, venderam: 8},
+    {grupo: "Grupo 3", posts: 190, vendas: 32.46, total: 222.46, participacao: 37.50, venderam: 8},
+    {grupo: "Grupo 4", posts: 145, vendas: 46.07, total: 191.07, participacao: 37.21, venderam: 16},
+    {grupo: "Grupo 6", posts: 128, vendas: 16.41, total: 144.41, participacao: 26.02, venderam: 7}
   ];
   /* Cupons do grupo 5 que ainda não venderam no Duelo (lista da Guava) */
   const CUPONS_SEM_VENDA = {
