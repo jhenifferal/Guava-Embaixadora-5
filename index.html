@@ -146,6 +146,8 @@ h3.sub{font-size:22px;margin:18px 0 8px}
 ol.steps{margin:0 0 20px;padding-left:22px;display:flex;flex-direction:column;gap:10px}
 ol.steps small{display:block;color:var(--muted);font-size:14px}
 #forms{width:100%}
+.oficial{display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:14px;background:var(--soft);margin-bottom:14px}
+.oficial .btn{width:100%}
 #materiais .tip,.card>.tip{margin-top:10px}
 .done{display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:16px;background:var(--green-soft)}
 .done h3{color:var(--green);font-size:24px}
@@ -241,7 +243,12 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
         <li><b>Seu TikTok</b></li>
         <li><b>Onde você mais ajuda o time</b><small>vendas, conteúdo ou os dois</small></li>
       </ol>
-      <a class="btn" id="forms" href="https://forms.gle/QhbhSjxmPSSuTgmd8" target="_blank" rel="noopener">Confirmar minha participação</a>
+      <div class="oficial">
+        <b>Primeiro passo: aceite a campanha no app da Inbazz</b>
+        <p class="tip">Só contam os pontos de quem aceitou a campanha oficial do Duelo por lá. Este site é só pra equipe acompanhar.</p>
+        <a class="btn" href="https://creators.inbazz.com.br/community/campaign-detail?id=c815567b-5faf-4243-8991-e6d7f553b3c6&amp;tab=invites&amp;storeId=8a0c243a-5571-4602-81f6-243d82159723" target="_blank" rel="noopener">Abrir a campanha oficial</a>
+      </div>
+      <a class="btn ghost" id="forms" href="https://forms.gle/QhbhSjxmPSSuTgmd8" target="_blank" rel="noopener">Confirmar minha participação</a>
       <p class="tip">Abre o formulário do Google numa aba nova. Depois é só voltar aqui pros materiais.</p>
     </section>
 
@@ -365,19 +372,21 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
      tamanhoGrupo: total de embaixadoras do grupo 5 (20 participando + 16 faltando = 36 = 30% de 119) */
   const TAMANHO_GRUPO = 119;
   const PLACAR = {
-    atualizado: "26/11 às 17h",
-    atual:    {posicao: 4, total: 233.34, vendas: 27.34, posts: 206, participacao: 34.45, venderam: 8},
-    anterior: {posicao: 4, total: 205.46, vendas: 22.46, posts: 183, participacao: 31.09, venderam: 7}
+    atualizado: "27/11 às 11h",
+    atual:    {posicao: 4, total: 278.77, vendas: 29.77, posts: 249, participacao: 39.50, venderam: 10},
+    anterior: {posicao: 4, total: 233.34, vendas: 27.34, posts: 206, participacao: 34.45, venderam: 8}
   };
+  /* Lista da Guava com quem ainda não completou os 10 pontos de post (sem nomes, só a conta) */
+  const LISTA_POSTS = {enviada: "27/11 às 11:18", abaixoDe10: 32, pontosQueFaltam: 221, soStories: 123};
   /* Ranking de todos os grupos, igual ao placar da Guava (participacao e venderam: null quando não divulgado) */
   const RANKING = [
-    {grupo: "Grupo 2", posts: 314, vendas: 88.40, total: 402.40, participacao: 42.86, venderam: 13},
-    {grupo: "Grupo 7", posts: 310, vendas: 63.86, total: 373.86, participacao: 44.17, venderam: 15},
-    {grupo: "Grupo 1", posts: 262, vendas: 28.00, total: 290.00, participacao: 41.74, venderam: 14},
-    {grupo: "Grupo 5", posts: 206, vendas: 27.34, total: 233.34, participacao: 34.45, venderam: 8},
-    {grupo: "Grupo 3", posts: 190, vendas: 32.46, total: 222.46, participacao: 37.50, venderam: 8},
-    {grupo: "Grupo 4", posts: 145, vendas: 46.07, total: 191.07, participacao: 37.21, venderam: 16},
-    {grupo: "Grupo 6", posts: 128, vendas: 16.41, total: 144.41, participacao: 26.02, venderam: 7}
+    {grupo: "Grupo 2", posts: 408, vendas: 128.46, total: 536.46, participacao: 46.22, venderam: 17},
+    {grupo: "Grupo 7", posts: 412, vendas: 81.84, total: 493.84, participacao: 49.17, venderam: 19},
+    {grupo: "Grupo 1", posts: 348, vendas: 37.77, total: 385.77, participacao: 47.83, venderam: 16},
+    {grupo: "Grupo 5", posts: 249, vendas: 29.77, total: 278.77, participacao: 39.50, venderam: 10},
+    {grupo: "Grupo 3", posts: 228, vendas: 39.19, total: 267.19, participacao: 42.05, venderam: 12},
+    {grupo: "Grupo 4", posts: 199, vendas: 56.37, total: 255.37, participacao: 43.02, venderam: 16},
+    {grupo: "Grupo 6", posts: 187, vendas: 16.41, total: 203.41, participacao: 28.46, venderam: 7}
   ];
   /* Cupons do grupo 5 que ainda não venderam no Duelo (lista da Guava) */
   const CUPONS_SEM_VENDA = {
@@ -440,10 +449,12 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
     const posts = Math.floor(gap) + 1;
     dicas.push(`Com <b>${posts} posts a mais</b> o time passa o ${esc(acima.grupo)}.`);
     if (eu > 1) dicas.push(`Pro 1º lugar faltam <b>${n2(ord[0].total - ord[eu].total)} pontos</b>.`);
-    if (eu < ord.length - 1) { const abaixo = ord[eu + 1], folga = Math.round((ord[eu].total - abaixo.total) * 100) / 100; if (folga < 5) dicas.push(`Atenção: o ${esc(abaixo.grupo)} está só <b>${n2(folga)} ${folga === 1 ? "ponto" : "pontos"} atrás</b>.`); }
+    if (eu < ord.length - 1) { const abaixo = ord[eu + 1], folga = Math.round((ord[eu].total - abaixo.total) * 100) / 100; if (folga < 15) dicas.push(`Atenção: o ${esc(abaixo.grupo)} está só <b>${n2(folga)} ${folga === 1 ? "ponto" : "pontos"} atrás</b>.`); }
   } else if (eu === 0) dicas.push("O time está em <b>1º lugar</b>. Bora segurar!");
   dicas.push("Cada <b>Gel de Sobrancelhas</b> vendido vale <b>1 ponto</b>, o mesmo que R$ 100 em vendas.");
-  if (A.participacao != null && A.participacao >= 30) dicas.push(`<b>Meta de 30% batida</b>: o time está com ${n2(A.participacao)}% de participação. Agora é não deixar cair.`);
+  if (A.participacao >= 30 && A.venderam >= 10) dicas.unshift(`<b>GRUPO VALIDADO!</b> Batemos os 30% de participação e as 10 embaixadoras com venda. Agora cada ponto conta pra subir no ranking.`);
+  if (LISTA_POSTS) dicas.push(`Pela lista da Guava de <b>${LISTA_POSTS.enviada}</b>, ${LISTA_POSTS.abaixoDe10} meninas ainda não completaram os 10 pontos e podem somar <b>${LISTA_POSTS.pontosQueFaltam} pontos</b>. Só com 1 story por dia até 30/11, são +${LISTA_POSTS.soStories}. <b>Quem não está na lista já fez o limite de 10 pontos</b>: o foco agora é vender e engajar as colegas.`);
+  if (A.participacao != null && A.participacao >= 30 && !(A.venderam >= 10)) dicas.push(`<b>Meta de 30% batida</b>: o time está com ${n2(A.participacao)}% de participação. Agora é não deixar cair.`);
   if (A.participacao != null && A.participacao < 30) {
     const meta = Math.ceil(TAMANHO_GRUPO * 0.3), ja = Math.round(A.participacao / 100 * TAMANHO_GRUPO);
     dicas.push(`Já são cerca de <b>${ja} embaixadoras participando</b>. Faltam <b>${Math.max(0, meta - ja)} diferentes</b> postarem ou venderem pra bater os 30%.`);
@@ -502,7 +513,10 @@ footer{margin-top:28px;font-size:14px;color:var(--muted)}
     catch (e) { const r = document.createRange(); r.selectNodeContents(btn.querySelector(".cup-t")); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); t.textContent = "selecionado"; }
     setTimeout(() => { t.textContent = "copiar"; btn.classList.remove("ok"); }, 1800);
   });
-  document.getElementById("cup-lead").innerHTML = A.venderam != null && A.venderam < 10
+  if (A.venderam >= 10) document.querySelector(".cupons h2").textContent = "Cupons que ainda não venderam";
+  document.getElementById("cup-lead").innerHTML = A.venderam >= 10
+    ? `O grupo já validou com 10 embaixadoras vendendo! Essa é a lista de ${CUPONS_SEM_VENDA.atualizado}: cada venda nova ainda soma ponto pro ranking.`
+    : A.venderam != null && A.venderam < 10
     ? `Faltam <b>${10 - A.venderam} embaixadoras com venda</b> pra validar o grupo. ${CUPONS_SEM_VENDA.lista.length} cupons ainda não venderam nessa semana.`
     : `${CUPONS_SEM_VENDA.lista.length} cupons ainda não venderam nessa semana.`;
 
